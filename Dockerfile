@@ -2,7 +2,6 @@ FROM ubuntu:20.04
 
 WORKDIR /compileCodebook
 
-COPY . .
 
 ARG DEBIAN_FRONTEND=noninteractive
 

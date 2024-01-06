@@ -1,4 +1,5 @@
 IMAGE_NAME="codebook"
+CONTAINER_NAME="codebookLatex"
 
 if ! docker images "$IMAGE_NAME" | grep -q "$IMAGE_NAME"; then
     echo "Building xeLatex Docker image..."
@@ -8,13 +9,14 @@ else
 fi
 
 echo "Running Docker container..."
-sudo docker run --name codebookLatex "codebook"
+sudo docker run -v "$(pwd):/compileCodebook" --name "$CONTAINER_NAME" "$IMAGE_NAME"
 
-echo "Copying PDF from container to host..."
-sudo docker cp codebookLatex:/compileCodebook/codebook.pdf .
 
 echo "Stopping and removing container..."
-sudo docker stop codebookLatex
-sudo docker rm codebookLatex
+sudo docker stop "$CONTAINER_NAME"
+sudo docker rm "$CONTAINER_NAME"
+
+echo "Removing log..."
+rm ./codebook.aux ./codebook.log ./codebook.toc
 
 echo "Done."
